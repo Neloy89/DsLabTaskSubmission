@@ -71,8 +71,6 @@ int main()
   cout << "\nPostorder  \n";
   postorder(root);
 
-  // Don't forget to free the memory allocated for nodes if needed.
-  // (In practice, you might use smart pointers or other memory management techniques.)
   delete root->left;
   delete root->right;
   delete root;
