@@ -1,75 +1,98 @@
 #include <iostream>
 using namespace std;
 
-#define size 10
+const int maxSize = 10;
 
-int arr[size], top = -1;
+class Queue {
+private:
+    int front, rear;
+    int arr[maxSize];
 
-bool empty()
-{
-    if (top == -1)
-        return true;
-    else
-        return false;
-}
-
-void push(int x)
-{
-    if (top == size - 1)
-    {
-        cout << "Queue is over flow" << endl;
+public:
+    Queue() {
+        front = rear = -1;
     }
 
-    top++;
-    arr[top] = x;
-}
-
-void pop()
-{
-    if (empty())
-    {
-        cout << "Queue is empty" << endl;
+    bool isEmpty() {
+        return front == -1;
     }
-    else
-    {
-        for (int i = 0; i < top; i++)
-        {
-            arr[i] = arr[i + 1];
+
+    bool isFull() {
+        return (rear + 1) % maxSize == front;
+    }
+
+    void enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue is full. Cannot enqueue." << endl;
+            return;
         }
-        top--;
-    }
-}
 
-void display()
-{
-    if (empty())
-    {
-        cout << "Queue is empty" << endl;
+        if (isEmpty()) {
+            front = rear = 0;
+        } else {
+            rear = (rear + 1) % maxSize;
+        }
+
+        arr[rear] = value;
+        cout << value << " enqueued to the queue." << endl;
     }
-    else
-    {
-        for (int i = 0; i <= top; i++)
-        {
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is empty. Cannot dequeue." << endl;
+            return;
+        }
+
+        int removedValue = arr[front];
+
+        if (front == rear) {
+            front = rear = -1;
+        } else {
+            front = (front + 1) % maxSize;
+        }
+
+        cout << removedValue << " dequeued from the queue." << endl;
+    }
+
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is empty." << endl;
+            return;
+        }
+
+        cout << "Elements in the queue: ";
+        int i = front;
+
+        do {
             cout << arr[i] << " ";
-        }
+            i = (i + 1) % maxSize;
+        } while (i != (rear + 1) % maxSize);
+
         cout << endl;
     }
-}
+};
 
-int main()
-{
-    push(5);
-    push(10);
+int main() {
+    Queue ok;
 
-    cout << "Queue elements: " << endl;
-    display();
+    ok.enqueue(10);
+    ok.enqueue(20);
+    ok.enqueue(30);
 
-    cout << endl;
+    ok.display();
 
-    pop();
+    ok.dequeue();
+    ok.display();
 
-    cout << "Queue elements after dequeue: ";
-    display();
+    ok.enqueue(40);
+    ok.display();
+    ok.enqueue(50);
+    ok.display();
+    ok.dequeue();
+    ok.enqueue(60);
+    ok.enqueue(70);
+    ok.dequeue();
+    ok.display();
 
     return 0;
 }
